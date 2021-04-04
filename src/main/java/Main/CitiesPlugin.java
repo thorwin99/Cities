@@ -1,5 +1,11 @@
+package Main;
+
+import Commands.CityCommand;
+import Commands.CityShowChunksSubCommand;
 import Events.BlockEventListener;
-import Serilazibles.CityManager;
+import Serilazibles.Vector2;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,11 +22,15 @@ public class CitiesPlugin extends JavaPlugin {
     @Override
     public void onEnable(){
         logger = getLogger();
+        ConfigurationSerialization.registerClass(Vector2.class);
 
         PluginInstance = this;
 
         cityManager = new CityManager(this);
         cityManager.LoadCities();
+
+        RegisterCommands();
+        RegisterEvents();
 
         logger.info("Enabled Cities");
     }
@@ -34,9 +44,10 @@ public class CitiesPlugin extends JavaPlugin {
     private void RegisterEvents(){
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new BlockEventListener(), this);
+        manager.registerEvents(new CityShowChunksSubCommand(), this);
     }
 
     private void RegisterCommands(){
-
+        getCommand("city").setExecutor(new CityCommand());
     }
 }
