@@ -37,6 +37,12 @@ public class CityCreateSubCommand extends CitySubCommand {
         if(commandSender instanceof Player){
             Player p = (Player) commandSender;
             if(strings.length < 2)return false;
+
+            if(CityManager.Static.getPlayerCity(p) != null){
+                p.sendMessage(ChatColor.RED + "You are already in a city. You cant create a second one.");
+                return true;
+            }
+
             String name = strings[1];
             int radius = CitiesPlugin.PluginInstance.getConfig().getInt("settings.cityDefaultRadius");
 
@@ -51,7 +57,7 @@ public class CityCreateSubCommand extends CitySubCommand {
             if(chunks.size() == (2 * radius - 1) * (2 * radius - 1)){
                 boolean result = CityManager.Static.createCity(name, p, chunks);
                 if(result){
-                    commandSender.sendMessage(ChatColor.GREEN + "City " + name + "created.");
+                    commandSender.sendMessage(ChatColor.GREEN + "City " + name + " created.");
                     //Spawn effect to see it
                 }
                 else{
