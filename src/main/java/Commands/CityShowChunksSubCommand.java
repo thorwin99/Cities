@@ -9,21 +9,36 @@ import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+/**
+ * City sub command to show a scoreboard with chunks marked as city ones or unclaimed yet.
+ */
 public class CityShowChunksSubCommand extends CitySubCommand implements Listener {
 
+    /**
+     * The scoreboard display name
+     */
     private static final String SCOREBOARDNAME = "City chunk map";
+
+    /**
+     * The objective name for the chunk map
+     */
     private static final String OBJECTIVENAME = "CityChunkMap";
+
+    /**
+     * The unicode char for a square representing a chunk
+     */
     private static final char CHUNK_SYM = '\u2588';
+
+    /**
+     * The size of the map in chunks
+     */
     private static final int MAP_SIZE = 11;
 
     public CityShowChunksSubCommand() {
@@ -77,7 +92,7 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
                             cancel();
                             return;
                         }
-                        OnPlayerMove(p);
+                        UpdateMap(p);
                     }
                 }.runTaskTimer(CitiesPlugin.PluginInstance, 0, 20);
             }
@@ -91,10 +106,11 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
         return false;
     }
 
-    //@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void OnPlayerMove(Player p){
-        //Player p = e.getPlayer();
-
+    /**
+     * Called when the scoreboard should update the map for player p
+     * @param p The player
+     */
+    public void UpdateMap(Player p){
         Scoreboard s = p.getScoreboard();
         Objective chunkMap = s.getObjective(OBJECTIVENAME);
 

@@ -20,10 +20,24 @@ import java.util.List;
  */
 public class CityManager {
 
+    /**
+     * Static instance of the city manager, should always be used to access it.
+     */
     public static CityManager Static;
 
+    /**
+     * Hashset of cities, that currently exist on the server
+     */
     private HashSet<City> cities;
+
+    /**
+     * Map of chunks and their data, used to store custom chunk data
+     */
     private HashMap<Chunk, ChunkData> ownedChunks;
+
+    /**
+     * The path to the folder, where the cities are saved.
+     */
     private Path cityFolder;
 
     public CityManager(JavaPlugin plugin){

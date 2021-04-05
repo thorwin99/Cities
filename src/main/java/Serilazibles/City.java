@@ -14,11 +14,21 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * Serializable class for a city. A city is defined by its chunks
+ * and its residents. It has a name and belongs to only one world.
+ */
 public class City implements Serializable {
     private static final long serialVersionUID = -179363563369893866L;
 
+    /**
+     * A set of vectors of chunk coordinates for all chunks of the city area
+     */
     private HashSet<Vector2> chunks;
 
+    /**
+     * The uuids of the residents
+     */
     private HashSet<UUID> residents;
     private String cityName;
     private String cityWorld;
@@ -127,6 +137,11 @@ public class City implements Serializable {
         return null;
     }
 
+    /**
+     * Saves this object to filepath
+     * @param filePath Path to the file for this object
+     * @return true if save was successful
+     */
     public boolean SaveData(String filePath){
         try{
             BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));

@@ -7,9 +7,15 @@ import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
 
+/**
+ * The basic city command, which runs its sub commands and manages permissions
+ */
 public class CityCommand implements CommandExecutor {
 
-    HashMap<String, CitySubCommand> subCommands;
+    /**
+     * Set of all sub commands with their name as key
+     */
+    private HashMap<String, CitySubCommand> subCommands;
 
     public CityCommand(){
         subCommands = new HashMap<>();
@@ -45,6 +51,10 @@ public class CityCommand implements CommandExecutor {
         return true;
     }
 
+    /**
+     * Registers a new sub command
+     * @param command Command to register
+     */
     private void registerSubCommand(CitySubCommand command){
         if(subCommands.containsKey(command.getName()))return;
 

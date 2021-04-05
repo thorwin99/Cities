@@ -10,6 +10,9 @@ import java.util.Objects;
  */
 public abstract class CitySubCommand {
 
+    /**
+     * Name of the sub command
+     */
     private String name;
 
     public CitySubCommand(String name){

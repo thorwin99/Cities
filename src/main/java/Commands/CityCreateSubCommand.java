@@ -3,16 +3,15 @@ package Commands;
 import Main.CitiesPlugin;
 import Main.CityManager;
 import Serilazibles.City;
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-
-import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * City sub command to create a city
+ */
 public class CityCreateSubCommand extends CitySubCommand {
 
     public CityCreateSubCommand(){
@@ -64,6 +63,13 @@ public class CityCreateSubCommand extends CitySubCommand {
         return true;
     }
 
+    /***
+     * Gets all valid chunks, those are which are not claimed yet, and returns them.
+     * Chunks will only be checked in radius from center, where radius 1 equals the center chunk.
+     * @param center The center chunk
+     * @param radius The radius
+     * @return A set of chunks that are yet to be claimed
+     */
     private HashSet<Chunk> GetValidCityChunks(Chunk center, int radius){
         HashSet<Chunk> chunks = new HashSet<>();
         for(int x = -(radius - 1); x < radius; x++){

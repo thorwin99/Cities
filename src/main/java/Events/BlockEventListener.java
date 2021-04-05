@@ -13,6 +13,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+/**
+ * Event listener for block break, place and interact events, to prevent players,
+ * who are not resident of a city, to build or interact with blocks there.
+ */
 public class BlockEventListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

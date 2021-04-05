@@ -6,11 +6,18 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Class representing a 2D Vector
+ * Bukkit Serializable Class representing a 2D Vector
  */
 public class Vector2 implements ConfigurationSerializable {
 
+    /**
+     * The X coordinate
+     */
     public int X;
+
+    /**
+     * The y coordinate
+     */
     public int Y;
 
     /**
