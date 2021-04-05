@@ -52,7 +52,7 @@ public class CityCreateSubCommand extends CitySubCommand {
                     //Spawn effect to see it
                 }
                 else{
-                    commandSender.sendMessage(ChatColor.RED + "A city with that name already exists.");
+                    commandSender.sendMessage(ChatColor.RED + "A city with that name already exists. Names are case insensitive.");
                 }
             }
             else{
