@@ -3,6 +3,7 @@ package Commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -48,6 +49,15 @@ public abstract class CitySubCommand {
      * @return true if executed successfully.
      */
     public abstract boolean execute(CommandSender commandSender, Command command, String s, String[] strings);
+
+    /**
+     * Returns a list of suggestions on tab complete, after the initial sub command name
+     * @param commandSender The command sender
+     * @param s The command name
+     * @param args Entered arguments
+     * @return A list of suggestions
+     */
+    public abstract List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args);
 
     @Override
     public boolean equals(Object o) {

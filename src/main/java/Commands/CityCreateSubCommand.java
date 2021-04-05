@@ -8,7 +8,10 @@ import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * City sub command to create a city
@@ -65,6 +68,11 @@ public class CityCreateSubCommand extends CitySubCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args) {
+        return new ArrayList<>();
     }
 
     /***

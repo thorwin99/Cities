@@ -4,13 +4,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * The basic city command, which runs its sub commands and manages permissions
  */
-public class CityCommand implements CommandExecutor {
+public class CityCommand implements CommandExecutor, TabCompleter {
 
     /**
      * Set of all sub commands with their name as key
@@ -51,6 +54,27 @@ public class CityCommand implements CommandExecutor {
         return true;
     }
 
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        List<String> suggestions = new ArrayList<>();
+        if(strings.length <= 1 && !subCommands.containsKey(strings[0])){
+            String start = strings.length < 1 ? "" : strings[0];
+            for(CitySubCommand c : subCommands.values()){
+                String perm = c.getNeededPermission();
+                if(perm == null)perm = "cities.city";
+                if(commandSender.hasPermission(perm) && c.getName().startsWith(start))
+                    suggestions.add(c.getName());
+            }
+        }
+        else{
+            String subCommand = strings[0];
+            if(subCommands.containsKey(subCommand)){
+                return subCommands.get(subCommand).getTabCompletion(commandSender, command, s, strings);
+            }
+        }
+        return suggestions;
+    }
+
     /**
      * Registers a new sub command
      * @param command Command to register
@@ -60,5 +84,4 @@ public class CityCommand implements CommandExecutor {
 
         subCommands.put(command.getName(), command);
     }
-
 }

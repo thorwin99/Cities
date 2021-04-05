@@ -16,10 +16,13 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * City sub command to show a scoreboard with chunks marked as city ones or unclaimed yet.
  */
-public class CityShowChunksSubCommand extends CitySubCommand implements Listener {
+public class CityShowChunksSubCommand extends CitySubCommand {
 
     /**
      * The scoreboard display name
@@ -109,6 +112,11 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
             commandSender.sendMessage(ChatColor.RED + "Only players can run this command");
         }
         return true;
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args) {
+        return new ArrayList<>();
     }
 
     /**

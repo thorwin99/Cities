@@ -58,13 +58,14 @@ public class CitiesPlugin extends JavaPlugin {
     private void RegisterEvents(){
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new BlockEventListener(), this);
-        manager.registerEvents(new CityShowChunksSubCommand(), this);
     }
 
     /**
      * Register all commands of this plugin
      */
     private void RegisterCommands(){
-        getCommand("city").setExecutor(new CityCommand());
+        CityCommand city = new CityCommand();
+        getCommand("city").setExecutor(city);
+        getCommand("city").setTabCompleter(city);
     }
 }
