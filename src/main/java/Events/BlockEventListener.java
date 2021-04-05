@@ -19,6 +19,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class BlockEventListener implements Listener {
 
+    private static final String ADMIN_PERM = "cities.city.protection";
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void OnBlockBreak(BlockBreakEvent event){
         Player p = event.getPlayer();
@@ -56,11 +58,13 @@ public class BlockEventListener implements Listener {
      * @return True, if the player can interact ith the block.
      */
     private boolean CanInteractWithBlock(Block block, Player player){
+        if(player.hasPermission(ADMIN_PERM))return true;
+
         Chunk chunk = block.getChunk();
 
-        City city = CityManager.Static.getCity(chunk);
+        String city = CityManager.Static.getCity(chunk);
         if(city != null){
-            if(!city.isResident(player.getUniqueId())){
+            if(!CityManager.Static.playerIsResident(city, player)){
                 return false;
             }
             else{
