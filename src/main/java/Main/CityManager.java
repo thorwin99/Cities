@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * This class manages all cities for the server. It loads them and saves them if wanted.
@@ -26,9 +26,10 @@ public class CityManager {
     public static CityManager Static;
 
     /**
-     * Hashset of cities, that currently exist on the server
+     * HashMap of cities, that currently exist on the server
+     * with their name as key
      */
-    private HashSet<City> cities;
+    private HashMap<String, City> cities;
 
     /**
      * Map of chunks and their data, used to store custom chunk data
@@ -40,13 +41,19 @@ public class CityManager {
      */
     private Path cityFolder;
 
+    /**
+     * Reference to the plugins logger.
+     */
+    private Logger logger;
+
     public CityManager(JavaPlugin plugin){
         if(Static == null)
             Static = this;
 
         cityFolder = plugin.getDataFolder().toPath().resolve("Cities");
-        cities = new HashSet<>();
+        cities = new HashMap<>();
         ownedChunks = new HashMap<>();
+        logger = CitiesPlugin.PluginInstance.getLogger();
     }
 
     /**
@@ -65,7 +72,7 @@ public class CityManager {
 
             ownedChunks.put(c, new ChunkData(c, city));
         }
-        cities.add(city);
+        cities.put(cityName, city);
         SaveCities();
         return city;
     }
@@ -102,14 +109,14 @@ public class CityManager {
         for(File file : folder.listFiles()){
             City data = City.LoadData(file.getAbsolutePath());
             if(data == null){
-                //Error handling goes here
+                logger.warning("The file " + file.getName() + " does not contain data for a city. It is skipped.");
                 continue;
             }
 
             World w = CitiesPlugin.PluginInstance.getServer().getWorld(data.getCityWorld());
             if(w == null)continue;
 
-            cities.add(data);
+            cities.put(data.getName(), data);
 
             for(Vector2 coordinates : data.getChunks()){
                 Chunk c = w.getChunkAt(coordinates.X, coordinates.Y);
@@ -135,7 +142,7 @@ public class CityManager {
                 e.printStackTrace();
             }
         }
-        for(City city : cities){
+        for(City city : cities.values()){
             String path = cityFolder.resolve(city.getName()).toAbsolutePath().toString();
             File f = new File(path);
             if(!f.exists()) {
@@ -146,7 +153,7 @@ public class CityManager {
                 }
             }
             if(!city.SaveData(path)){
-                //Handle error
+                logger.warning("City " + city.getName() + " could not be saved.");
             }
         }
     }
