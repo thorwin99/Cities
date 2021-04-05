@@ -88,7 +88,7 @@ public class CityManager {
      */
     public boolean removeCity(String cityName){
         if(!cityExists(cityName))return false;
-        City city = cities.get(cityName.toLowerCase());
+        City city = getCity(cityName);
         World world = Bukkit.getWorld(city.getCityWorld());
         if(world == null){
             logger.warning("The city " + cityName + " is no longer in a valid world. It will still be removed, its chunks wont be updated");
@@ -116,7 +116,7 @@ public class CityManager {
         if(!cityExists(cityName))return false;
         if(getPlayerCity(resident) != null)return false;
 
-        City city = cities.get(cityName.toLowerCase());
+        City city = getCity(cityName);
         city.addResident(resident.getUniqueId());
         return true;
     }
@@ -129,7 +129,7 @@ public class CityManager {
      */
     public boolean removeResidentFromCity(String cityName, Player resident){
         if(!cityExists(cityName))return false;
-        City city = cities.get(cityName);
+        City city = getCity(cityName);
 
         return city.getResidents().remove(resident.getUniqueId());
     }
@@ -143,7 +143,7 @@ public class CityManager {
     public boolean addChunkToCity(Chunk chunk, String cityName){
         if(!cityExists(cityName))return false;
         if(ownedChunks.containsKey(chunk))return false;
-        City city = cities.get(cityName.toLowerCase());
+        City city = getCity(cityName);
         ChunkData data = new ChunkData(chunk, city);
         ownedChunks.put(chunk, data);
         city.addChunk(chunk);
@@ -165,7 +165,7 @@ public class CityManager {
 
         if(data.getCity() == null)return false;
 
-        City city = cities.get(cityName);
+        City city = getCity(cityName);
 
         boolean ret = city.removeChunk(chunk);
         ownedChunks.remove(chunk);
@@ -185,6 +185,18 @@ public class CityManager {
             }
         }
         return null;
+    }
+
+    /**
+     * Checks if the player is resident of the given city
+     * @param cityName City name
+     * @param player Player to check
+     * @return True if he is a resident, false if either the city does not exist, or the player is no resident.
+     */
+    public boolean playerIsResident(String cityName, Player player){
+        if(!cityExists(cityName))return false;
+        City city = getCity(cityName);
+        return city.isResident(player.getUniqueId());
     }
 
     /**
@@ -209,12 +221,12 @@ public class CityManager {
     /**
      * Tries to get the city of a chunk
      * @param chunk Chunk to check
-     * @return The City of the chunk or null
+     * @return The name of the City of the chunk or null
      */
-    public City getCity(Chunk chunk){
+    public String getCity(Chunk chunk){
         if(!ownedChunks.containsKey(chunk))return null;
 
-        return ownedChunks.get(chunk).getCity();
+        return ownedChunks.get(chunk).getCity().getName();
     }
 
     /**
@@ -277,4 +289,12 @@ public class CityManager {
         }
     }
 
+    /**
+     * Gets a city if possible
+     * @param cityName Name of the city
+     * @return The city or null if not existend
+     */
+    private City getCity(String cityName){
+        return cities.get(cityName.toLowerCase());
+    }
 }
