@@ -67,6 +67,43 @@ public class City implements Serializable {
     }
 
     /**
+     * Removes a chunk from this cities area, if it is
+     * part of the city.
+     * @param chunk Chunk to remove
+     * @return True, if the chunk was removed
+     */
+    public boolean removeChunk(Chunk chunk){
+        Vector2 coords = new Vector2(chunk.getX(), chunk.getZ());
+        if(chunks.contains(coords)){
+            chunks.remove(coords);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Adds a resident to the city.
+     * @param player UUID of the resident
+     * @return True if added successfully
+     */
+    public boolean addResident(UUID player){
+        if(residents.contains(player))return false;
+        residents.add(player);
+        return true;
+    }
+
+    /**
+     * Remove a resident to the city.
+     * @param player UUID of the resident
+     * @return True if removed successfully
+     */
+    public boolean removeResident(UUID player){
+        if(!residents.contains(player))return false;
+        residents.remove(player);
+        return true;
+    }
+
+    /**
      * Gets the name of the city
      * @return The city name
      */
