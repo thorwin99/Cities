@@ -24,6 +24,7 @@ public class CityCommand implements CommandExecutor, TabCompleter {
         subCommands = new HashMap<>();
         registerSubCommand(new CityCreateSubCommand());
         registerSubCommand(new CityMapSubCommand());
+        registerSubCommand(new CityChunkSubCommand());
     }
 
     @Override

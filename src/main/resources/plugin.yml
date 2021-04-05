@@ -10,9 +10,13 @@ permissions:
   cities.city:
     description: Allow the use of the standard city command
     default: true
-  cities.city.map:
-    description: Permission to use the city map
-    default: op
   cities.city.admin:
     description: Overrides the block protection in cities. Players with this permission can build, destroy and interact in every city.
     default: op
+    children:
+      cities.city.map:
+        description: Permission to use the city map
+        default: op
+      cities.city.chunks:
+        description: Permission to manipulate chunks to add or remove from your city.
+        default: op

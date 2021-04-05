@@ -46,7 +46,7 @@ public abstract class CitySubCommand {
      * @param command The command
      * @param s Command name
      * @param strings Arguments
-     * @return true if executed successfully.
+     * @return true if executed. False if some syntax error occured and the usage should be printed
      */
     public abstract boolean execute(CommandSender commandSender, Command command, String s, String[] strings);
 
