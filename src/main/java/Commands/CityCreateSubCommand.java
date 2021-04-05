@@ -3,6 +3,7 @@ package Commands;
 import Main.CitiesPlugin;
 import Main.CityManager;
 import Serilazibles.City;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -40,24 +41,27 @@ public class CityCreateSubCommand extends CitySubCommand {
                 try {
                     radius = Integer.parseInt(strings[2]);
                 }catch (NumberFormatException e){
-                    commandSender.sendMessage(strings[2] + " is not a valid radius. The radius must be an integer.");
+                    commandSender.sendMessage(ChatColor.RED + strings[2] + " is not a valid radius. The radius must be an integer.");
                 }
             }
             HashSet<Chunk> chunks = GetValidCityChunks(p.getLocation().getChunk(), radius);
             if(chunks.size() == (2 * radius - 1) * (2 * radius - 1)){
-                City c = CityManager.Static.createCity(name, p, chunks);
-                if(c != null){
-                    commandSender.sendMessage("City " + name + "created.");
+                boolean result = CityManager.Static.createCity(name, p, chunks);
+                if(result){
+                    commandSender.sendMessage(ChatColor.GREEN + "City " + name + "created.");
                     //Spawn effect to see it
+                }
+                else{
+                    commandSender.sendMessage(ChatColor.RED + "A city with that name already exists.");
                 }
             }
             else{
-                commandSender.sendMessage("Cant create city, some chunks seem to be already owned. Please reduce the radius, or move to another location.");
+                commandSender.sendMessage(ChatColor.RED + "Cant create city, some chunks seem to be already owned. Please reduce the radius, or move to another location.");
             }
 
         }
         else{
-            commandSender.sendMessage("You cant create a city, if you are not a player");
+            commandSender.sendMessage(ChatColor.RED + "You cant create a city, if you are not a player");
         }
 
         return true;

@@ -60,9 +60,11 @@ public class CityManager {
      * Creates a new City with the given player as its creator
      * @param cityName Name of the city
      * @param creator Creator of the city
-     * @return The created city
+     * @return If the city was created successfully, false if one already exists with that name
      */
-    public City createCity(String cityName, Player creator, HashSet<Chunk> cityChunks){
+    public boolean createCity(String cityName, Player creator, HashSet<Chunk> cityChunks){
+        if(cities.containsKey(cityName.toLowerCase())) return false;
+
         City city = new City(cityName, creator.getUniqueId(), creator.getWorld());
 
         for(Chunk c : cityChunks){
@@ -72,9 +74,9 @@ public class CityManager {
 
             ownedChunks.put(c, new ChunkData(c, city));
         }
-        cities.put(cityName, city);
+        cities.put(cityName.toLowerCase(), city);
         SaveCities();
-        return city;
+        return true;
     }
 
     /**
@@ -116,7 +118,7 @@ public class CityManager {
             World w = CitiesPlugin.PluginInstance.getServer().getWorld(data.getCityWorld());
             if(w == null)continue;
 
-            cities.put(data.getName(), data);
+            cities.put(data.getName().toLowerCase(), data);
 
             for(Vector2 coordinates : data.getChunks()){
                 Chunk c = w.getChunkAt(coordinates.X, coordinates.Y);
