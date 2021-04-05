@@ -12,8 +12,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -227,6 +229,18 @@ public class CityManager {
         if(!ownedChunks.containsKey(chunk))return null;
 
         return ownedChunks.get(chunk).getCity().getName();
+    }
+
+    /**
+     * Gets all cities
+     * @return Returns a list of all names for the cities.
+     */
+    public List<String> getCities(){
+        List<String> names = new ArrayList<>();
+        for(String name : cities.keySet()){
+            names.add(name);
+        }
+        return names;
     }
 
     /**
