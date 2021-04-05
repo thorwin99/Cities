@@ -23,7 +23,7 @@ public class CityCommand implements CommandExecutor, TabCompleter {
     public CityCommand(){
         subCommands = new HashMap<>();
         registerSubCommand(new CityCreateSubCommand());
-        registerSubCommand(new CityShowChunksSubCommand());
+        registerSubCommand(new CityMapSubCommand());
     }
 
     @Override

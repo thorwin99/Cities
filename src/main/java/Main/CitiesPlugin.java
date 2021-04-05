@@ -1,7 +1,6 @@
 package Main;
 
 import Commands.CityCommand;
-import Commands.CityShowChunksSubCommand;
 import Events.BlockEventListener;
 import Serilazibles.Vector2;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;

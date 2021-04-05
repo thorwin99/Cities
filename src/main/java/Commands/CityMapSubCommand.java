@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * City sub command to show a scoreboard with chunks marked as city ones or unclaimed yet.
  */
-public class CityShowChunksSubCommand extends CitySubCommand {
+public class CityMapSubCommand extends CitySubCommand {
 
     /**
      * The scoreboard display name
@@ -49,7 +49,7 @@ public class CityShowChunksSubCommand extends CitySubCommand {
      */
     private static final int MAP_SIZE = 11;
 
-    public CityShowChunksSubCommand() {
+    public CityMapSubCommand() {
         super("map");
     }
 
