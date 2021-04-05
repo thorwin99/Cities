@@ -24,3 +24,6 @@ permissions:
       cities.city.chunks:
         description: Permission to manipulate chunks to add or remove from your city.
         default: op
+      cities.city.residents:
+        description: Permission to add or remove residents from your city.
+        default: op
