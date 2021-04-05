@@ -1,6 +1,5 @@
 package Events;
 
-import Serilazibles.City;
 import Main.CityManager;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
