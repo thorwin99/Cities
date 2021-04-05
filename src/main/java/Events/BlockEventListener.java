@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class BlockEventListener implements Listener {
 
-    private static final String ADMIN_PERM = "cities.city.protection";
+    private static final String ADMIN_PERM = "cities.city.admin";
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void OnBlockBreak(BlockBreakEvent event){

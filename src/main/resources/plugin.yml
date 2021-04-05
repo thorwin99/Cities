@@ -13,6 +13,6 @@ permissions:
   cities.city.map:
     description: Permission to use the city map
     default: op
-  cities.city.protection:
+  cities.city.admin:
     description: Overrides the block protection in cities. Players with this permission can build, destroy and interact in every city.
     default: op
