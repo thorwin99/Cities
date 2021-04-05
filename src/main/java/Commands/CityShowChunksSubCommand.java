@@ -37,9 +37,9 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
     private static final char CHUNK_SYM = '\u2588';
 
     /**
-     * The unicode char for the square representing the chunk where the player is in
+     * The unicode char sfor the square representing the chunk where the player is in and his direction
      */
-    private static final char CHUNK_SYM_CENTER = '\u25CF';
+    private static final char[] CHUNK_SYM_CENTER = {'\u25B2', '\u25E5', '\u25B6', '\u25E2', '\u25BC', '\u25E3', '\u25C0', '\u25E4'};
 
     /**
      * The size of the map in chunks
@@ -47,7 +47,7 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
     private static final int MAP_SIZE = 11;
 
     public CityShowChunksSubCommand() {
-        super("chunks");
+        super("map");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
 
     @Override
     public String getUsage() {
-        return "/city chunks";
+        return "/city map";
     }
 
     @Override
@@ -99,7 +99,7 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
                         }
                         UpdateMap(p);
                     }
-                }.runTaskTimer(CitiesPlugin.PluginInstance, 0, 20);
+                }.runTaskTimer(CitiesPlugin.PluginInstance, 0, 5);
             }
             else{
                 commandSender.sendMessage(ChatColor.RED + "Could not create scoreboard to visualize chunks :(");
@@ -108,7 +108,7 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
         else{
             commandSender.sendMessage(ChatColor.RED + "Only players can run this command");
         }
-        return false;
+        return true;
     }
 
     /**
@@ -118,18 +118,18 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
     public void UpdateMap(Player p){
         Scoreboard s = p.getScoreboard();
         Objective chunkMap = s.getObjective(OBJECTIVENAME);
-
         if(chunkMap == null)return;
 
         Chunk center = p.getLocation().getChunk();
-
+        int dir = getDirection(p);
         for(int y = 0; y < MAP_SIZE; y++){
             Team row = s.getTeam("r" + (y + 1));
             String suffix = "";
+
             for(int x = 0; x < MAP_SIZE; x++){
-                Chunk c = center.getWorld().getChunkAt(center.getX() - (MAP_SIZE / 2) + x, center.getZ() - (MAP_SIZE / 2) + y);
+                Chunk c = center.getWorld().getChunkAt(center.getX() + (MAP_SIZE / 2) - x, center.getZ() - (MAP_SIZE / 2) + y);
                 ChunkData data = CityManager.Static.getChunkData(c);
-                char sym = c == center ? CHUNK_SYM_CENTER : CHUNK_SYM;
+                char sym = c == center ? CHUNK_SYM_CENTER[dir] : CHUNK_SYM;
                 if(data == null){
                     suffix += "" + ChatColor.GRAY + sym;
                 }
@@ -140,5 +140,20 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
             chunkMap.getScore(ChatColor.RED + "" + (y - MAP_SIZE / 2)).setScore(center.getZ() + (y - 1 - MAP_SIZE / 2));
             row.setPrefix(suffix);
         }
+    }
+
+    /**
+     * Gets the viewing direction of the player, where 0 is south, and 3 is east
+     * @param p The player
+     * @return The direction as an integer value
+     */
+    private int getDirection(Player p){
+        long angle = ((long)p.getLocation().getYaw()) % 360;
+        angle = angle < 0 ? angle + 360 : angle;
+
+        int result = Math.round((float)angle / 45f);
+        result %= CHUNK_SYM_CENTER.length;
+        result = result < 0 ? 0 : result;
+        return result;
     }
 }
