@@ -37,6 +37,11 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
     private static final char CHUNK_SYM = '\u2588';
 
     /**
+     * The unicode char for the square representing the chunk where the player is in
+     */
+    private static final char CHUNK_SYM_CENTER = '\u25CF';
+
+    /**
      * The size of the map in chunks
      */
     private static final int MAP_SIZE = 11;
@@ -122,13 +127,14 @@ public class CityShowChunksSubCommand extends CitySubCommand implements Listener
             Team row = s.getTeam("r" + (y + 1));
             String suffix = "";
             for(int x = 0; x < MAP_SIZE; x++){
-                Chunk c = center.getWorld().getChunkAt(center.getX() - 2 + x, center.getZ() - 2 + y);
+                Chunk c = center.getWorld().getChunkAt(center.getX() - (MAP_SIZE / 2) + x, center.getZ() - (MAP_SIZE / 2) + y);
                 ChunkData data = CityManager.Static.getChunkData(c);
+                char sym = c == center ? CHUNK_SYM_CENTER : CHUNK_SYM;
                 if(data == null){
-                    suffix += "" + ChatColor.GRAY + CHUNK_SYM;
+                    suffix += "" + ChatColor.GRAY + sym;
                 }
                 else if(data.getCity() != null){
-                    suffix += "" + ChatColor.RED + CHUNK_SYM;
+                    suffix += "" + ChatColor.RED + sym;
                 }
             }
             chunkMap.getScore(ChatColor.RED + "" + (y - MAP_SIZE / 2)).setScore(center.getZ() + (y - 1 - MAP_SIZE / 2));
