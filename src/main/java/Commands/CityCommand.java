@@ -18,7 +18,7 @@ public class CityCommand implements CommandExecutor, TabCompleter {
     /**
      * Set of all sub commands with their name as key
      */
-    private HashMap<String, CitySubCommand> subCommands;
+    private final HashMap<String, CitySubCommand> subCommands;
 
     public CityCommand(){
         subCommands = new HashMap<>();
@@ -27,6 +27,7 @@ public class CityCommand implements CommandExecutor, TabCompleter {
         registerSubCommand(new CityChunkSubCommand());
         registerSubCommand(new CityListSubCommand());
         registerSubCommand(new CityResidentCommand());
+        registerSubCommand(new CityDeleteSubCommand());
     }
 
     @Override
