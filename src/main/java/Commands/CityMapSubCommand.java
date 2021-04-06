@@ -64,7 +64,12 @@ public class CityMapSubCommand extends CitySubCommand {
     }
 
     @Override
-    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean isAdminExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings, boolean isAdminExec) {
         if(commandSender instanceof Player){
             final Player p = (Player) commandSender;
 
@@ -120,7 +125,7 @@ public class CityMapSubCommand extends CitySubCommand {
     }
 
     @Override
-    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args) {
+    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args, int startIndex) {
         return new ArrayList<>();
     }
 
@@ -147,7 +152,8 @@ public class CityMapSubCommand extends CitySubCommand {
                     suffix += "" + ChatColor.GRAY + sym;
                 }
                 else if(data.getCity() != null){
-                    suffix += "" + ChatColor.RED + sym;
+                    ChatColor color = data.getCity().isResident(p.getUniqueId()) ? ChatColor.GREEN : ChatColor.RED;
+                    suffix += "" + color + sym;
                 }
             }
             row.setPrefix(suffix);

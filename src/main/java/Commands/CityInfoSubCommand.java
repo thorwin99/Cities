@@ -26,7 +26,12 @@ public class CityInfoSubCommand extends CitySubCommand {
     }
 
     @Override
-    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean isAdminExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings, boolean isAdminExec) {
         if(strings.length != 1)return false;
         if(commandSender instanceof Player){
             Player p = (Player) commandSender;
@@ -46,7 +51,7 @@ public class CityInfoSubCommand extends CitySubCommand {
     }
 
     @Override
-    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args) {
+    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args, int startIndex) {
         return new LinkedList<>();
     }
 }

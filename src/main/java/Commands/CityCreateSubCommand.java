@@ -24,7 +24,7 @@ public class CityCreateSubCommand extends CitySubCommand {
 
     @Override
     public String getNeededPermission() {
-        return null;
+        return "cities.city.create";
     }
 
     @Override
@@ -33,7 +33,12 @@ public class CityCreateSubCommand extends CitySubCommand {
     }
 
     @Override
-    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean isAdminExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings, boolean isAdminExec) {
         if(commandSender instanceof Player){
             Player p = (Player) commandSender;
             if(strings.length < 2)return false;
@@ -77,7 +82,7 @@ public class CityCreateSubCommand extends CitySubCommand {
     }
 
     @Override
-    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args) {
+    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args, int startIndex) {
         return new ArrayList<>();
     }
 

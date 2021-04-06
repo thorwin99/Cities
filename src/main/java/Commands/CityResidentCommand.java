@@ -33,63 +33,23 @@ public class CityResidentCommand extends CitySubCommand{
     }
 
     @Override
-    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean isAdminExecutable() {
+        return true;
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings, boolean isAdminExec) {
+        if(isAdminExec){
+            if(strings.length < 4 || strings.length > 5)return false;
+            return runCommand(commandSender, strings[1], strings, 2);
+        }
         if(commandSender instanceof Player){
             if(strings.length < 2 || strings.length > 3)return false;
 
             Player player = (Player) commandSender;
             String city = CityManager.Static.getPlayerCity(player);
 
-            if(city == null){
-                commandSender.sendMessage(ChatColor.RED + "You are currently no resident of a city.");
-                return true;
-            }
-
-            if(strings.length == 2){
-                if(strings[1].equals("list")){
-                    printResidentListPage(commandSender, city, 1);
-                }else{
-                    commandSender.sendMessage(ChatColor.RED + "You need to specify a player.");
-                }
-            }
-            else{
-                String action = strings[1];
-
-                if(action.equals("list")){
-                    try{
-                        int page = Integer.parseInt(strings[2]);
-                        printResidentListPage(commandSender, city, page);
-                    }catch(NumberFormatException e){
-                        commandSender.sendMessage(ChatColor.RED + strings[2] + " is not a valid page number");
-                    }
-                    return true;
-                }
-
-                String playerName = strings[2];
-                Player player2 = Bukkit.getServer().getPlayer(playerName);
-
-                if(player2 == null){
-                    commandSender.sendMessage(ChatColor.RED + "Player " + playerName + " not found");
-                }
-                else{
-                    if(action.equals("add")){
-                        if(CityManager.Static.addResidentToCity(city, player2)){
-                            commandSender.sendMessage(ChatColor.GREEN + "Player added successfully to your city.");
-                        }
-                        else{
-                            commandSender.sendMessage(ChatColor.RED + "The Player is already in a city");
-                        }
-                    }
-                    else if(action.equals("remove")){
-                        if(CityManager.Static.removeResidentFromCity(city, player2)){
-                            commandSender.sendMessage(ChatColor.GREEN + "The Player was removed from your city.");
-                        }
-                        else{
-                            commandSender.sendMessage(ChatColor.RED + "The Player is not in your city");
-                        }
-                    }
-                }
-            }
+            return runCommand(commandSender, city, strings, 0);
         }
         else{
             commandSender.sendMessage(ChatColor.RED + "You need to be a player to use this command.");
@@ -98,16 +58,16 @@ public class CityResidentCommand extends CitySubCommand{
     }
 
     @Override
-    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args) {
+    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args, int startIndex) {
         List<String> suggestions = new ArrayList<>();
-        if(args.length == 2){
-            if("add".startsWith(args[1])) suggestions.add("add");
-            if("remove".startsWith(args[1])) suggestions.add("remove");
-            if("list".startsWith(args[1])) suggestions.add("list");
+        if(args.length == startIndex + 2){
+            if("add".startsWith(args[startIndex + 1])) suggestions.add("add");
+            if("remove".startsWith(args[startIndex + 1])) suggestions.add("remove");
+            if("list".startsWith(args[startIndex + 1])) suggestions.add("list");
         }
-        else if(args.length == 3 && !args[1].equals("list")){
+        else if(args.length == startIndex + 3 && !args[startIndex + 1].equals("list")){
             Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
-            String startName = args[2];
+            String startName = args[startIndex + 2];
 
             for(Player p : players){
                 if(p.getDisplayName().startsWith(startName))
@@ -115,6 +75,56 @@ public class CityResidentCommand extends CitySubCommand{
             }
         }
         return suggestions;
+    }
+
+    private boolean runCommand(CommandSender commandSender, String city, String[] strings, int offset) {
+        if(city == null){
+            commandSender.sendMessage(ChatColor.RED + "You are currently no resident of a city.");
+            return true;
+        }
+
+        if(strings.length == 2 + offset){
+            if(strings[offset + 1].equals("list")){
+                printResidentListPage(commandSender, city, 1);
+            }else{
+                commandSender.sendMessage(ChatColor.RED + "You need to specify a player.");
+            }
+        }
+        else {
+            String action = strings[offset + 1];
+
+            if (action.equals("list")) {
+                try {
+                    int page = Integer.parseInt(strings[offset + 2]);
+                    printResidentListPage(commandSender, city, page);
+                } catch (NumberFormatException e) {
+                    commandSender.sendMessage(ChatColor.RED + strings[offset + 2] + " is not a valid page number");
+                }
+                return true;
+            }
+
+            String playerName = strings[offset + 2];
+            Player player2 = Bukkit.getServer().getPlayer(playerName);
+
+            if (player2 == null) {
+                commandSender.sendMessage(ChatColor.RED + "Player " + playerName + " not found");
+            } else {
+                if (action.equals("add")) {
+                    if (CityManager.Static.addResidentToCity(city, player2)) {
+                        commandSender.sendMessage(ChatColor.GREEN + "Player added successfully to the city " + ChatColor.YELLOW + city + ChatColor.GREEN + ".");
+                    } else {
+                        commandSender.sendMessage(ChatColor.RED + "The Player is already in a city");
+                    }
+                } else if (action.equals("remove")) {
+                    if (CityManager.Static.removeResidentFromCity(city, player2)) {
+                        commandSender.sendMessage(ChatColor.GREEN + "The Player was removed from the city " + ChatColor.YELLOW + city + ChatColor.GREEN + ".");
+                    } else {
+                        commandSender.sendMessage(ChatColor.RED + "The Player is not in the city " + ChatColor.YELLOW + city + ChatColor.GREEN + ".");
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private void printResidentListPage(CommandSender commandSender, String city, int page) {

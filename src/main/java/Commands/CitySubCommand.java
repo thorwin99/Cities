@@ -41,23 +41,31 @@ public abstract class CitySubCommand {
     public abstract String getUsage();
 
     /**
+     * Whether or not this command can be used in /city admin
+     * @return True if it is, false if not
+     */
+    public abstract boolean isAdminExecutable();
+
+    /**
      * Executes the sub command
      * @param commandSender The command sender
      * @param command The command
      * @param s Command name
      * @param strings Arguments
+     * @param isAdminExec If the command was executed as a sub of /city admin cityName
      * @return true if executed. False if some syntax error occured and the usage should be printed
      */
-    public abstract boolean execute(CommandSender commandSender, Command command, String s, String[] strings);
+    public abstract boolean execute(CommandSender commandSender, Command command, String s, String[] strings, boolean isAdminExec);
 
     /**
      * Returns a list of suggestions on tab complete, after the initial sub command name
      * @param commandSender The command sender
      * @param s The command name
      * @param args Entered arguments
+     * @param startIndex Index of the start of the sub command
      * @return A list of suggestions
      */
-    public abstract List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args);
+    public abstract List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args, int startIndex);
 
     @Override
     public boolean equals(Object o) {

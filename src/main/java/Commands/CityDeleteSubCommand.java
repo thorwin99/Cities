@@ -28,7 +28,12 @@ public class CityDeleteSubCommand extends CitySubCommand{
     }
 
     @Override
-    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean isAdminExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender, Command command, String s, String[] strings, boolean isAdminExec) {
         if(strings.length != 2)return false;
 
         String cityName = strings[1];
@@ -44,13 +49,13 @@ public class CityDeleteSubCommand extends CitySubCommand{
     }
 
     @Override
-    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args) {
+    public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args, int startIndex) {
         List<String> suggestions = new LinkedList<>();
 
-        if(args.length != 2)return suggestions;
+        if(args.length != startIndex + 2)return suggestions;
 
         for(String city : CityManager.Static.getCities()){
-            if(city.startsWith(args[1]))
+            if(city.startsWith(args[startIndex + 1]))
                 suggestions.add(city);
         }
 

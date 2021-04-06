@@ -18,7 +18,7 @@ permissions:
         description: Show info for your city
         default: true
   cities.city.admin:
-    description: Overrides the block protection in cities. Players with this permission can build, destroy and interact in every city.
+    description: This permission allows editing / deleting of all cities, as well as building in them
     default: op
     children:
       cities.city.map:
