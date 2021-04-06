@@ -163,7 +163,7 @@ public class City implements Serializable {
      */
     public static City LoadData(String filePath){
         try {
-            BukkitObjectInputStream in = new BukkitObjectInputStream(new FileInputStream(filePath));
+            BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(filePath)));
             City data = (City) in.readObject();
             in.close();
 
@@ -181,7 +181,7 @@ public class City implements Serializable {
      */
     public boolean SaveData(String filePath){
         try{
-            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new FileOutputStream(filePath));
+            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));
             out.writeObject(this);
             out.close();
             return true;
