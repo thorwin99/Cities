@@ -121,7 +121,7 @@ public class CityResidentCommand extends CitySubCommand{
         List<UUID> playerIds = CityManager.Static.getCityResidents(city);
 
         if(page < 0 || page > playerIds.size() / 10 + 1){
-            commandSender.sendMessage(ChatColor.RED + "THe page " + page + " does not exist.");
+            commandSender.sendMessage(ChatColor.RED + "The page " + page + " does not exist.");
         }
 
         commandSender.sendMessage(ChatColor.BLUE + "=== " + ChatColor.YELLOW + "Residents of " + ChatColor.GREEN+ city + ChatColor.BLUE + " ===");
