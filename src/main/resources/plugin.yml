@@ -30,3 +30,9 @@ permissions:
       cities.city.residents:
         description: Permission to add or remove residents from your city.
         default: op
+      cities.city.delete:
+        description: Permission to delete any city.
+        default: op
+      cities.city.create:
+        description: Permission to create a city.
+        default: op

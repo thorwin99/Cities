@@ -28,6 +28,7 @@ public class CityCommand implements CommandExecutor, TabCompleter {
         registerSubCommand(new CityListSubCommand());
         registerSubCommand(new CityResidentCommand());
         registerSubCommand(new CityDeleteSubCommand());
+        registerSubCommand(new CityInfoSubCommand());
     }
 
     @Override
