@@ -15,7 +15,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
@@ -241,6 +243,16 @@ public class CityManager {
             names.add(name);
         }
         return names;
+    }
+
+    /**
+     * Tries to get all residents of the given city
+     * @param cityName Name of the city
+     * @return A list of uuids of all the cities residents or null if it does not exist.
+     */
+    public List<UUID> getCityResidents(String cityName){
+        if(!cityExists(cityName))return null;
+        return new LinkedList<>(getCity(cityName).getResidents());
     }
 
     /**
