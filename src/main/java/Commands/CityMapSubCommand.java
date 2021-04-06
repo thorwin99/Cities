@@ -90,7 +90,12 @@ public class CityMapSubCommand extends CitySubCommand {
                     row.addEntry(ChatColor.RED + "" + (i - 1 - MAP_SIZE / 2));
                     mapObjective.getScore(ChatColor.RED + "" + (i - 1 - MAP_SIZE / 2)).setScore(i);
                 }
-
+                Team name = scoreboard.getTeam("cc");
+                if(name == null){
+                    name = scoreboard.registerNewTeam("cc");
+                }
+                name.addEntry(ChatColor.GRAY + "Chunk city: ");
+                mapObjective.getScore(ChatColor.GRAY + "Chunk city: ").setScore(0);
                 p.setScoreboard(scoreboard);
                 new BukkitRunnable(){
 
@@ -145,8 +150,15 @@ public class CityMapSubCommand extends CitySubCommand {
                     suffix += "" + ChatColor.RED + sym;
                 }
             }
-            chunkMap.getScore(ChatColor.RED + "" + (y - MAP_SIZE / 2)).setScore(center.getZ() + (y - 1 - MAP_SIZE / 2));
             row.setPrefix(suffix);
+        }
+        ChunkData data = CityManager.Static.getChunkData(center);
+        Team chunkCity = s.getTeam("cc");
+        if(data == null){
+            chunkCity.setSuffix(ChatColor.WHITE + "None");
+        }
+        else{
+            chunkCity.setSuffix(ChatColor.GREEN + data.getCity().getName());
         }
     }
 
