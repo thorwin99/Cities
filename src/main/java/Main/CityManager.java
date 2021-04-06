@@ -108,6 +108,7 @@ public class CityManager {
         }
 
         cities.remove(cityName.toLowerCase());
+        deleteCityFile(cityName);
         SaveCities();
         return true;
     }
@@ -319,6 +320,25 @@ public class CityManager {
                 logger.warning("City " + city.getName() + " could not be saved.");
             }
         }
+    }
+
+    /**
+     * Deletes the save file of a city
+     * @param city City to delete
+     * @return True if deleted.
+     */
+    private boolean deleteCityFile(String city){
+        File folder = cityFolder.toFile();
+        if(!folder.exists()){
+            return false;
+        }
+
+        String path = cityFolder.resolve(city).toAbsolutePath().toString();
+        File f = new File(path);
+        if(f.exists()){
+            return f.delete();
+        }
+        return false;
     }
 
     /**
