@@ -35,7 +35,7 @@ public class CityListSubCommand extends CitySubCommand{
             commandSender.sendMessage(ChatColor.BLUE + "=========" + ChatColor.YELLOW + "Cities" + ChatColor.BLUE + "=========");
 
             for(String name : cities){
-                commandSender.sendMessage(ChatColor.GREEN + " * " + name);
+                commandSender.sendMessage(ChatColor.GREEN + " * " + ChatColor.GRAY + name);
             }
 
             return true;
