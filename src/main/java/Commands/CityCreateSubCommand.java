@@ -39,7 +39,7 @@ public class CityCreateSubCommand extends CitySubCommand {
             if(strings.length < 2)return false;
 
             if(CityManager.Static.getPlayerCity(p) != null){
-                p.sendMessage(ChatColor.RED + "You are already in a city. You cant create a second one.");
+                p.sendMessage(ChatColor.RED + "You are already in a city. You cant create a second one.y");
                 return true;
             }
 
