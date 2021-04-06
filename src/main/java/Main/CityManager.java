@@ -3,6 +3,7 @@ package Main;
 import Serilazibles.City;
 import Serilazibles.Vector2;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -97,6 +98,7 @@ public class CityManager {
         if(world == null){
             logger.warning("The city " + cityName + " is no longer in a valid world. It will still be removed, its chunks wont be updated");
             cities.remove(cityName.toLowerCase());
+            SaveCities();
             return true;
         }
 
@@ -106,7 +108,7 @@ public class CityManager {
         }
 
         cities.remove(cityName.toLowerCase());
-
+        SaveCities();
         return true;
     }
 
@@ -122,6 +124,7 @@ public class CityManager {
 
         City city = getCity(cityName);
         city.addResident(resident.getUniqueId());
+        SaveCities();
         return true;
     }
 
@@ -135,6 +138,7 @@ public class CityManager {
         if(!cityExists(cityName))return false;
         City city = getCity(cityName);
 
+        SaveCities();
         return city.getResidents().remove(resident.getUniqueId());
     }
 
@@ -152,6 +156,7 @@ public class CityManager {
         ownedChunks.put(chunk, data);
         city.addChunk(chunk);
 
+        SaveCities();
         return true;
     }
 
@@ -174,6 +179,7 @@ public class CityManager {
         boolean ret = city.removeChunk(chunk);
         ownedChunks.remove(chunk);
 
+        SaveCities();
         return ret;
     }
 
