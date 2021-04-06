@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -76,6 +77,8 @@ public class CityChunkSubCommand extends CitySubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args) {
+        if(args.length != 2)return new LinkedList<>();
+
         String start = args[1];
         List<String> suggestions = new ArrayList<>();
         if("add".startsWith(start))suggestions.add("add");

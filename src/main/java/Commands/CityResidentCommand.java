@@ -102,8 +102,8 @@ public class CityResidentCommand extends CitySubCommand{
         List<String> suggestions = new ArrayList<>();
         if(args.length == 2){
             if("add".startsWith(args[1])) suggestions.add("add");
-            if("remove".startsWith(args[1])) suggestions.remove("remove");
-            if("list".startsWith(args[1])) suggestions.remove("list");
+            if("remove".startsWith(args[1])) suggestions.add("remove");
+            if("list".startsWith(args[1])) suggestions.add("list");
         }
         else if(args.length == 3 && !args[1].equals("list")){
             Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
@@ -125,13 +125,13 @@ public class CityResidentCommand extends CitySubCommand{
         }
 
         commandSender.sendMessage(ChatColor.BLUE + "=== " + ChatColor.YELLOW + "Residents of " + ChatColor.GREEN+ city + ChatColor.BLUE + " ===");
-        for(int i = (page - 1) * 10; i < (page * 10) % playerIds.size(); i++){
+        for(int i = (page - 1) * 10; i < playerIds.size() % (page * 10); i++){
             Player p = Bukkit.getServer().getPlayer(playerIds.get(i));
             if(p == null)continue;
 
             commandSender.sendMessage(ChatColor.GREEN + "* " + ChatColor.GRAY + p.getDisplayName());
         }
 
-        commandSender.sendMessage(ChatColor.BLUE + "=== " + ChatColor.YELLOW + "Page [" + page + "/" + (playerIds.size() / 10 + 1) + "]" + ChatColor.BLUE);
+        commandSender.sendMessage(ChatColor.BLUE + "=== " + ChatColor.YELLOW + "Page [" + page + "/" + (playerIds.size() / 10 + 1) + "]" + ChatColor.BLUE + " ===");
     }
 }
