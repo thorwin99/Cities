@@ -2,6 +2,7 @@ package Main;
 
 import Commands.CityCommand;
 import Events.BlockEventListener;
+import Events.PlayerMovementListener;
 import Serilazibles.Vector2;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.PluginManager;
@@ -42,6 +43,8 @@ public class CitiesPlugin extends JavaPlugin {
         RegisterCommands();
         RegisterEvents();
 
+        saveDefaultConfig();
+
         logger.info("Enabled Cities");
     }
 
@@ -57,6 +60,7 @@ public class CitiesPlugin extends JavaPlugin {
     private void RegisterEvents(){
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new BlockEventListener(), this);
+        manager.registerEvents(new PlayerMovementListener(), this);
     }
 
     /**
