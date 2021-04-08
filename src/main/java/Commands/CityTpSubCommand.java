@@ -89,7 +89,7 @@ public class CityTpSubCommand extends CitySubCommand {
     @Override
     public List<String> getTabCompletion(CommandSender commandSender, Command command, String s, String[] args, int startIndex) {
         List<String> suggestions = new LinkedList<>();
-        if(args.length == startIndex + 1){
+        if(args.length == startIndex + 2){
             String start = args[1];
             for(String city : CityManager.Static.getCities()){
                 if(city.startsWith(start))
