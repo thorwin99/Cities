@@ -45,9 +45,8 @@ public class City implements Serializable {
      * @param name Name of the city
      * @param creator Creator of the city
      */
-    public City(String name, UUID creator, World world){
+    public City(String name, World world){
         residents = new HashSet<>();
-        residents.add(creator);
         cityName = name;
         cityWorld = world.getName();
         chunks = new HashSet<>();

@@ -62,7 +62,11 @@ public class CityCreateSubCommand extends CitySubCommand {
             if(chunks.size() == (2 * radius - 1) * (2 * radius - 1)){
                 boolean result = CityManager.Static.createCity(name, p, chunks);
                 if(result){
-                    commandSender.sendMessage(ChatColor.GREEN + "City " + name + " created.");
+                    commandSender.sendMessage(ChatColor.GREEN + "City " + ChatColor.YELLOW + name + ChatColor.GREEN + " created.");
+                    if(CityManager.Static.getPlayerCity(p) == null){
+                        CityManager.Static.addResidentToCity(name, p);
+                        commandSender.sendMessage(ChatColor.GREEN + "You are now a resident of the city " + ChatColor.YELLOW + name);
+                    }
                     //Spawn effect to see it
                 }
                 else{

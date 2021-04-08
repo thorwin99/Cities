@@ -97,7 +97,7 @@ public class CityManager {
     public boolean createCity(String cityName, Player creator, HashSet<Chunk> cityChunks){
         if(cityExists(cityName)) return false;
 
-        City city = new City(cityName, creator.getUniqueId(), creator.getWorld());
+        City city = new City(cityName, creator.getWorld());
 
         for(Chunk c : cityChunks){
             city.addChunk(c);
