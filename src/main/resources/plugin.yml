@@ -36,3 +36,6 @@ permissions:
       cities.city.create:
         description: Permission to create a city.
         default: op
+      cities.city.tp:
+        description: Permission to teleport to a city.
+        default: op

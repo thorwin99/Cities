@@ -30,6 +30,7 @@ public class CityCommand implements CommandExecutor, TabCompleter {
         registerSubCommand(new CityResidentCommand());
         registerSubCommand(new CityDeleteSubCommand());
         registerSubCommand(new CityInfoSubCommand());
+        registerSubCommand(new CityTpSubCommand());
     }
 
     @Override
