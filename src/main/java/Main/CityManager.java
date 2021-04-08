@@ -263,6 +263,26 @@ public class CityManager {
     }
 
     /**
+     * Tries to get all chunks of the given city
+     * @param cityName Name of the city
+     * @return A list of vector2s for all chunk coordinates contained in the city.
+     */
+    public List<Vector2> getCityChunks(String cityName){
+        if(!cityExists(cityName))return null;
+        return new ArrayList<>(getCity(cityName).getChunks());
+    }
+
+    /**
+     * Tries to the world of the city
+     * @param cityName Name of the city
+     * @return The name of the city world
+     */
+    public String getCityWorld(String cityName){
+        if(!cityExists(cityName))return null;
+        return getCity(cityName).getCityWorld();
+    }
+
+    /**
      * Loads all cities from the city data folder
      */
     public void LoadCities(){

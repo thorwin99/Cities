@@ -43,7 +43,9 @@ public class CityInfoSubCommand extends CitySubCommand {
             else{
                 commandSender.sendMessage(ChatColor.BLUE + "======== " + ChatColor.YELLOW + "Info" + ChatColor.BLUE + " ========");
                 commandSender.sendMessage(ChatColor.GREEN + "Name: " + ChatColor.GRAY + city);
+                commandSender.sendMessage(ChatColor.GREEN + "Name: " + ChatColor.GRAY + CityManager.Static.getCityWorld(city));
                 commandSender.sendMessage(ChatColor.GREEN + "Residents: " + ChatColor.GRAY + CityManager.Static.getCityResidents(city).size());
+                commandSender.sendMessage(ChatColor.GREEN + "Area: " + ChatColor.GRAY + CityManager.Static.getCityChunks(city).size() + " Chunks");
             }
         }
 
