@@ -3,6 +3,7 @@ package Commands;
 import Main.ChunkManager;
 import Main.CitiesPlugin;
 import Main.CityManager;
+import Serilazibles.City;
 import Serilazibles.Vector2;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -183,6 +184,8 @@ public class CityChunkSubCommand extends CitySubCommand {
      * @param city City of the player
      */
     private void actionAdd(Player player, String city) {
+        int limit = CitiesPlugin.PluginInstance.getConfig().getInt("settings.cityChunkLimit");
+
         if(chunkStartMap.containsKey(player.getUniqueId())){
             if(chunkEndMap.containsKey(player.getUniqueId())){
                 Chunk start = chunkStartMap.get(player.getUniqueId());
@@ -192,7 +195,11 @@ public class CityChunkSubCommand extends CitySubCommand {
                     return;
                 }
                 List<Chunk> chunks = getValidChunksOfArea(start, end, city);
-                int added = 0;
+                int added = 0;if(chunks.size() > limit || chunks.size() + CityManager.Static.getCityChunks(city).size() > limit){
+                    player.sendMessage(ChatColor.RED + "Cannot add selected chunks, because adding those will exceed the cities chunk limit of " + limit + ".");
+                    return;
+                }
+
                 for(Chunk chunk : chunks){
                     if(CityManager.Static.addChunkToCity(chunk, city)) added++;
                 }
@@ -208,7 +215,13 @@ public class CityChunkSubCommand extends CitySubCommand {
         }
 
         Chunk c = player.getLocation().getChunk();
-        if (ChunkManager.Static.isClaimable(city, c)) {
+
+        if(CityManager.Static.getCityChunks(city).size() + 1 > limit){
+            player.sendMessage(ChatColor.RED + "Cannot add the chunk to the city, because adding it will exceed the cities chunk limit of " + limit + ".");
+            return;
+        }
+
+        if (CityManager.Static.addChunkToCity(c, city)) {
             player.sendMessage(ChatColor.GREEN + "Chunk added successfully to city " + ChatColor.YELLOW + city + ChatColor.GREEN + ".");
         } else {
             player.sendMessage(ChatColor.RED + "This chunk already belongs to a city or is to close to another city.");
