@@ -2,6 +2,8 @@ package Main;
 
 import Serilazibles.Vector2;
 import org.bukkit.Chunk;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 
 import java.util.HashMap;
 
@@ -69,5 +71,35 @@ public class ChunkManager {
         recordedChunks.get(chunk.getWorld().getName()).put(new Vector2(chunk.getX(), chunk.getZ()), data);
 
         return data;
+    }
+
+    /**
+     * Checks if the given chunk can be claimed for the given city
+     * @param chunk Chunk to be claimed
+     * @param city City to check
+     * @return True if it can be claimed, false otherwise.
+     */
+    public boolean isClaimable(String city, Chunk chunk){
+        if(hasChunkData(chunk)){
+            if(getChunkData(chunk).getCity() != null)return false;
+        }
+        if(!recordedChunks.containsKey(chunk.getWorld().getName()))return true;
+
+        Vector2 chunkCoords = new Vector2(chunk.getX(), chunk.getZ());
+        int buf = CitiesPlugin.PluginInstance.getConfig().getInt("settings.chunkBufferRadius");
+        for(Vector2 coords : recordedChunks.get(chunk.getWorld().getName()).keySet()){
+            int dx = coords.X - chunkCoords.X;
+            int dy = coords.Y - chunkCoords.Y;
+            if(Math.abs(dx) <= buf && Math.abs(dy) <= buf){
+                ChunkData data = getChunkData(chunk);
+
+                if(data == null || data.getCity() == null || data.getCity().getName().equals(city)) continue;
+
+                CitiesPlugin.PluginInstance.getLogger().warning("Chunk is in buffer zone, cant claim it.");
+                return false;
+            }
+        }
+
+        return true;
     }
 }

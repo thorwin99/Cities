@@ -34,19 +34,19 @@ public class CityManager {
      * HashMap of cities, that currently exist on the server
      * with their name as key
      */
-    private HashMap<String, City> cities;
+    private final HashMap<String, City> cities;
 
-    private ChunkManager chunkManager;
+    private final ChunkManager chunkManager;
 
     /**
      * The path to the folder, where the cities are saved.
      */
-    private Path cityFolder;
+    private final Path cityFolder;
 
     /**
      * Reference to the plugins logger.
      */
-    private Logger logger;
+    private final Logger logger;
 
     public CityManager(JavaPlugin plugin){
         if(Static == null)
@@ -72,11 +72,9 @@ public class CityManager {
         for(Chunk c : cityChunks){
             city.addChunk(c);
 
+            if(!chunkManager.isClaimable(cityName, c)) continue;
             if(chunkManager.hasChunkData(c)){
                 ChunkData data = chunkManager.getChunkData(c);
-
-                if(data.getCity() != null) continue;
-
                 data.setCity(city);
             }
             else{
@@ -155,7 +153,7 @@ public class CityManager {
      */
     public boolean addChunkToCity(Chunk chunk, String cityName){
         if(!cityExists(cityName))return false;
-        if(chunkManager.hasChunkData(chunk) && chunkManager.getChunkData(chunk).getCity() != null) return false;
+        if(!chunkManager.isClaimable(cityName, chunk)) return false;
         City city = getCity(cityName);
 
         chunkManager.createChunkData(chunk).setCity(city);

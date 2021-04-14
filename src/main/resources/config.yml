@@ -1,5 +1,6 @@
 settings:
   cityChunkLimit: 20,
   cityDefaultRadius: 2
+  chunkBufferRadius: 2
   showCityWelcomeMessage: true
   cityWelcomeMessage: "\u00A72Welcome to the city of \u00A7e{city}"

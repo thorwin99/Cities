@@ -1,8 +1,8 @@
 package Commands;
 
+import Main.ChunkManager;
 import Main.CitiesPlugin;
 import Main.CityManager;
-import Serilazibles.City;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
@@ -58,6 +58,13 @@ public class CityCreateSubCommand extends CitySubCommand {
                     commandSender.sendMessage(ChatColor.RED + strings[2] + " is not a valid radius. The radius must be an integer.");
                 }
             }
+
+            int limit = CitiesPlugin.PluginInstance.getConfig().getInt("settings.cityChunkLimit");
+            if(radius * radius > limit){
+                commandSender.sendMessage(ChatColor.RED + "The radius is to large. A city can have at max " + limit + " chunks.");
+                return true;
+            }
+
             HashSet<Chunk> chunks = GetValidCityChunks(p.getLocation().getChunk(), radius);
             if(chunks.size() == (2 * radius - 1) * (2 * radius - 1)){
                 boolean result = CityManager.Static.createCity(name, p, chunks);
@@ -74,7 +81,7 @@ public class CityCreateSubCommand extends CitySubCommand {
                 }
             }
             else{
-                commandSender.sendMessage(ChatColor.RED + "Cant create city, some chunks seem to be already owned. Please reduce the radius, or move to another location.");
+                commandSender.sendMessage(ChatColor.RED + "Cant create city, some chunks seem to be already owned, or are too close to another city. Please reduce the radius, or move to another location.");
             }
 
         }
@@ -102,7 +109,7 @@ public class CityCreateSubCommand extends CitySubCommand {
         for(int x = -(radius - 1); x < radius; x++){
             for(int y = -(radius - 1); y < radius; y++){
                 Chunk c = center.getWorld().getChunkAt(x + center.getX(), y + center.getZ());
-                if(CityManager.Static.getCity(c) == null){
+                if(ChunkManager.Static.isClaimable(null, c)){
                     chunks.add(c);
                 }
             }
