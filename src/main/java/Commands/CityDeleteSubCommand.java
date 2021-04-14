@@ -41,14 +41,10 @@ public class CityDeleteSubCommand extends CitySubCommand{
         if(CityManager.Static.cityExists(cityName)){
             if(CityManager.Static.removeCity(cityName)){
                 commandSender.sendMessage(ChatColor.GREEN + "The City " + ChatColor.YELLOW + cityName + ChatColor.GREEN + " was deleted.");
-            }
-            else{
-                commandSender.sendMessage(ChatColor.RED + "The City " + ChatColor.YELLOW + cityName + ChatColor.RED + " doesn't exist.");
+                return true;
             }
         }
-        else{
-            commandSender.sendMessage(ChatColor.RED + "The City " + ChatColor.YELLOW + cityName + " does not exist.");
-        }
+        commandSender.sendMessage(ChatColor.RED + "The City " + ChatColor.YELLOW + cityName + ChatColor.RED + " doesn't exist.");
         return true;
     }
 

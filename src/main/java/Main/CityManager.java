@@ -73,13 +73,8 @@ public class CityManager {
             city.addChunk(c);
 
             if(!chunkManager.isClaimable(cityName, c)) continue;
-            if(chunkManager.hasChunkData(c)){
-                ChunkData data = chunkManager.getChunkData(c);
-                data.setCity(city);
-            }
-            else{
-                chunkManager.createChunkData(c).setCity(city);
-            }
+
+            chunkManager.createChunkData(c).setCity(city);
         }
 
         cities.put(cityName, city);
@@ -98,7 +93,7 @@ public class CityManager {
         World world = Bukkit.getWorld(city.getCityWorld());
         if(world == null){
             logger.warning("The city " + cityName + " is no longer in a valid world. It will still be removed, its chunks wont be updated");
-            cities.remove(cityName.toLowerCase());
+            cities.remove(cityName);
             SaveCities();
             return true;
         }
@@ -291,7 +286,7 @@ public class CityManager {
             World w = CitiesPlugin.PluginInstance.getServer().getWorld(data.getCityWorld());
             if(w == null)continue;
 
-            cities.put(data.getName().toLowerCase(), data);
+            cities.put(data.getName(), data);
 
             for(Vector2 coordinates : data.getChunks()){
                 Chunk c = w.getChunkAt(coordinates.X, coordinates.Y);

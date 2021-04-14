@@ -91,9 +91,10 @@ public class ChunkManager {
             int dx = coords.X - chunkCoords.X;
             int dy = coords.Y - chunkCoords.Y;
             if(Math.abs(dx) <= buf && Math.abs(dy) <= buf){
-                ChunkData data = getChunkData(chunk);
+                ChunkData data = recordedChunks.get(chunk.getWorld().getName()).get(coords);
 
-                if(data != null && data.getCity() != null && data.getCity().getName().equals(city)) continue;
+                if(data == null || data.getCity() == null)continue;
+                if(data.getCity().getName().equals(city)) continue;
 
                 CitiesPlugin.PluginInstance.getLogger().warning("Chunk is in buffer zone, cant claim it.");
                 return false;
