@@ -1,5 +1,6 @@
 package Commands;
 
+import Main.ChunkManager;
 import Main.CitiesPlugin;
 import Main.CityManager;
 import Serilazibles.Vector2;
@@ -207,10 +208,10 @@ public class CityChunkSubCommand extends CitySubCommand {
         }
 
         Chunk c = player.getLocation().getChunk();
-        if (CityManager.Static.addChunkToCity(c, city)) {
+        if (ChunkManager.Static.isClaimable(city, c)) {
             player.sendMessage(ChatColor.GREEN + "Chunk added successfully to city " + ChatColor.YELLOW + city + ChatColor.GREEN + ".");
         } else {
-            player.sendMessage(ChatColor.RED + "This chunk already belongs to a city.");
+            player.sendMessage(ChatColor.RED + "This chunk already belongs to a city or is to close to another city.");
         }
     }
 
@@ -232,7 +233,7 @@ public class CityChunkSubCommand extends CitySubCommand {
 
         if(start == end){
             CitiesPlugin.PluginInstance.getLogger().info("Start equals end");
-            if(CityManager.Static.getCity(start) == null){
+            if(ChunkManager.Static.isClaimable(city, start)){
                 coords.add(start);
             }
             return coords;
@@ -242,7 +243,7 @@ public class CityChunkSubCommand extends CitySubCommand {
             for(int z = zStart; z >= zEnd; z--){
                 CitiesPlugin.PluginInstance.getLogger().info("Chunk " + x + " " + z);
                 Chunk c = start.getWorld().getChunkAt(x, z);
-                if(CityManager.Static.getCity(c) == null){
+                if(ChunkManager.Static.isClaimable(city, c)){
                     coords.add(c);
                 }
             }
