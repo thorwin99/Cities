@@ -50,7 +50,6 @@ public class CitiesPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        cityManager.SaveCities();
         logger.info("Disabled Cities");
     }
 
