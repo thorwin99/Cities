@@ -43,7 +43,7 @@ public class CityCreateSubCommand extends CitySubCommand {
             Player p = (Player) commandSender;
             if(strings.length < 2)return false;
 
-            if(CityManager.Static.getPlayerCity(p) != null){
+            if(CityManager.Static.getPlayerCity(p) != null && !p.hasPermission("cities.city.admin")){
                 p.sendMessage(ChatColor.RED + "You are already in a city. You cant create a second one.");
                 return true;
             }
@@ -56,7 +56,12 @@ public class CityCreateSubCommand extends CitySubCommand {
                     radius = Integer.parseInt(strings[2]);
                 }catch (NumberFormatException e){
                     commandSender.sendMessage(ChatColor.RED + strings[2] + " is not a valid radius. The radius must be an integer.");
+                    return true;
                 }
+            }
+            if(radius < 1){
+                commandSender.sendMessage(ChatColor.RED + strings[2] + " is not a valid radius. The radius must be larger than 1.");
+                return true;
             }
 
             int limit = CitiesPlugin.PluginInstance.getConfig().getInt("settings.cityChunkLimit");

@@ -93,7 +93,7 @@ public class ChunkManager {
             if(Math.abs(dx) <= buf && Math.abs(dy) <= buf){
                 ChunkData data = getChunkData(chunk);
 
-                if(data == null || data.getCity() == null || data.getCity().getName().equals(city)) continue;
+                if(data != null && data.getCity() != null && data.getCity().getName().equals(city)) continue;
 
                 CitiesPlugin.PluginInstance.getLogger().warning("Chunk is in buffer zone, cant claim it.");
                 return false;

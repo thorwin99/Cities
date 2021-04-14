@@ -82,7 +82,7 @@ public class CityManager {
             }
         }
 
-        cities.put(cityName.toLowerCase(), city);
+        cities.put(cityName, city);
         SaveCities();
         return true;
     }
@@ -109,7 +109,7 @@ public class CityManager {
             if(data != null && data.getCity() == city) data.setCity(null);
         }
 
-        cities.remove(cityName.toLowerCase());
+        cities.remove(cityName);
         deleteCityFile(cityName);
         SaveCities();
         return true;
@@ -220,7 +220,7 @@ public class CityManager {
      * @return True if tit exists
      */
     public boolean cityExists(String cityName){
-        return cities.containsKey(cityName.toLowerCase());
+        return cities.containsKey(cityName);
     }
 
     /**
@@ -230,8 +230,9 @@ public class CityManager {
      */
     public String getCity(Chunk chunk){
         if(!chunkManager.hasChunkData(chunk))return null;
-
-        return chunkManager.getChunkData(chunk).getCity().getName();
+        City c = chunkManager.getChunkData(chunk).getCity();
+        if(c == null)return null;
+        return c.getName();
     }
 
     /**
@@ -355,6 +356,6 @@ public class CityManager {
      * @return The city or null if not existend
      */
     private City getCity(String cityName){
-        return cities.get(cityName.toLowerCase());
+        return cities.get(cityName);
     }
 }

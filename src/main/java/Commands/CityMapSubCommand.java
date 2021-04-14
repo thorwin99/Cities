@@ -149,10 +149,10 @@ public class CityMapSubCommand extends CitySubCommand {
                 Chunk c = center.getWorld().getChunkAt(center.getX() + (MAP_SIZE / 2) - x, center.getZ() - (MAP_SIZE / 2) + y);
                 ChunkData data = ChunkManager.Static.getChunkData(c);
                 char sym = c == center ? CHUNK_SYM_CENTER[dir] : CHUNK_SYM;
-                if(data == null){
+                if(data == null || data.getCity() == null){
                     suffix += "" + ChatColor.GRAY + sym;
                 }
-                else if(data.getCity() != null){
+                else{
                     ChatColor color = data.getCity().isResident(p.getUniqueId()) ? ChatColor.GREEN : ChatColor.RED;
                     suffix += "" + color + sym;
                 }
@@ -160,8 +160,9 @@ public class CityMapSubCommand extends CitySubCommand {
             row.setPrefix(suffix);
         }
         ChunkData data = ChunkManager.Static.getChunkData(center);
+
         Team chunkCity = s.getTeam("cc");
-        if(data == null){
+        if(data == null || data.getCity() == null){
             chunkCity.setSuffix(ChatColor.WHITE + "None");
         }
         else{

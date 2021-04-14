@@ -1,5 +1,5 @@
 settings:
-  cityChunkLimit: 20,
+  cityChunkLimit: 20
   cityDefaultRadius: 2
   chunkBufferRadius: 2
   showCityWelcomeMessage: true
