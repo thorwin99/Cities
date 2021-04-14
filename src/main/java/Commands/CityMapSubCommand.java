@@ -1,6 +1,7 @@
 package Commands;
 
 import Main.ChunkData;
+import Main.ChunkManager;
 import Main.CitiesPlugin;
 import Main.CityManager;
 import org.bukkit.Bukkit;
@@ -146,7 +147,7 @@ public class CityMapSubCommand extends CitySubCommand {
 
             for(int x = 0; x < MAP_SIZE; x++){
                 Chunk c = center.getWorld().getChunkAt(center.getX() + (MAP_SIZE / 2) - x, center.getZ() - (MAP_SIZE / 2) + y);
-                ChunkData data = CityManager.Static.getChunkData(c);
+                ChunkData data = ChunkManager.Static.getChunkData(c);
                 char sym = c == center ? CHUNK_SYM_CENTER[dir] : CHUNK_SYM;
                 if(data == null){
                     suffix += "" + ChatColor.GRAY + sym;
@@ -158,7 +159,7 @@ public class CityMapSubCommand extends CitySubCommand {
             }
             row.setPrefix(suffix);
         }
-        ChunkData data = CityManager.Static.getChunkData(center);
+        ChunkData data = ChunkManager.Static.getChunkData(center);
         Team chunkCity = s.getTeam("cc");
         if(data == null){
             chunkCity.setSuffix(ChatColor.WHITE + "None");

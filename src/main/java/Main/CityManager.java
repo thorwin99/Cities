@@ -3,7 +3,6 @@ package Main;
 import Serilazibles.City;
 import Serilazibles.Vector2;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -18,7 +17,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -26,30 +24,6 @@ import java.util.logging.Logger;
  * This class manages all cities for the server. It loads them and saves them if wanted.
  */
 public class CityManager {
-
-    private class ChunkId {
-        public Vector2 Coordinate;
-        public String World;
-
-        public ChunkId(Chunk chunk) {
-            Coordinate = new Vector2(chunk.getX(), chunk.getZ());
-            World = chunk.getWorld().getName();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ChunkId chunkId = (ChunkId) o;
-            return Objects.equals(Coordinate, chunkId.Coordinate) &&
-                    Objects.equals(World, chunkId.World);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(Coordinate, World);
-        }
-    }
 
     /**
      * Static instance of the city manager, should always be used to access it.
@@ -62,11 +36,7 @@ public class CityManager {
      */
     private HashMap<String, City> cities;
 
-    /**
-     * Map of chunks and their data, used to store custom chunk data.
-     * Only chunks which are part of a city are currently in here
-     */
-    private HashMap<ChunkId, ChunkData> ownedChunks;
+    private ChunkManager chunkManager;
 
     /**
      * The path to the folder, where the cities are saved.
@@ -84,7 +54,7 @@ public class CityManager {
 
         cityFolder = plugin.getDataFolder().toPath().resolve("Cities");
         cities = new HashMap<>();
-        ownedChunks = new HashMap<>();
+        chunkManager = new ChunkManager();
         logger = CitiesPlugin.PluginInstance.getLogger();
     }
 
@@ -102,10 +72,18 @@ public class CityManager {
         for(Chunk c : cityChunks){
             city.addChunk(c);
 
-            if(ownedChunks.containsKey(new ChunkId(c)))continue;
+            if(chunkManager.hasChunkData(c)){
+                ChunkData data = chunkManager.getChunkData(c);
 
-            ownedChunks.put(new ChunkId(c), new ChunkData(c, city));
+                if(data.getCity() != null) continue;
+
+                data.setCity(city);
+            }
+            else{
+                chunkManager.createChunkData(c).setCity(city);
+            }
         }
+
         cities.put(cityName.toLowerCase(), city);
         SaveCities();
         return true;
@@ -129,7 +107,8 @@ public class CityManager {
 
         for(Vector2 chunk : city.getChunks()){
             Chunk c = world.getChunkAt(chunk.X, chunk.Y);
-            ownedChunks.remove(new ChunkId(c)); //TODO: Change to more complex chunk system if needed, since this is way to simple
+            ChunkData data = chunkManager.getChunkData(c);
+            if(data != null && data.getCity() == city) data.setCity(null);
         }
 
         cities.remove(cityName.toLowerCase());
@@ -176,10 +155,11 @@ public class CityManager {
      */
     public boolean addChunkToCity(Chunk chunk, String cityName){
         if(!cityExists(cityName))return false;
-        if(ownedChunks.containsKey(new ChunkId(chunk)))return false;
+        if(chunkManager.hasChunkData(chunk) && chunkManager.getChunkData(chunk).getCity() != null) return false;
         City city = getCity(cityName);
-        ChunkData data = new ChunkData(chunk, city);
-        ownedChunks.put(new ChunkId(chunk), data);
+
+        chunkManager.createChunkData(chunk).setCity(city);
+
         city.addChunk(chunk);
 
         SaveCities();
@@ -194,17 +174,17 @@ public class CityManager {
      */
     public boolean removeChunkFromCity(Chunk chunk, String cityName){
         if(!cityExists(cityName))return false;
-        ChunkId id = new ChunkId(chunk);
-        if(!ownedChunks.containsKey(id))return false;
 
-        ChunkData data = ownedChunks.get(id);
+        if(!chunkManager.hasChunkData(chunk))return false;
+
+        ChunkData data = chunkManager.getChunkData(chunk);
 
         if(data.getCity() == null)return false;
 
         City city = getCity(cityName);
 
         boolean ret = city.removeChunk(chunk);
-        ownedChunks.remove(id);
+        data.setCity(null);
 
         SaveCities();
         return ret;
@@ -246,24 +226,14 @@ public class CityManager {
     }
 
     /**
-     * Returns the chunk data for the chunk, if any
-     * @param chunk Chunk to retreive data for
-     * @return The chunk data or null if not existent
-     */
-    public ChunkData getChunkData(Chunk chunk){
-        if(ownedChunks.containsKey(new ChunkId(chunk)))return ownedChunks.get(new ChunkId(chunk));
-        return null;
-    }
-
-    /**
      * Tries to get the city of a chunk
      * @param chunk Chunk to check
      * @return The name of the City of the chunk or null
      */
     public String getCity(Chunk chunk){
-        if(!ownedChunks.containsKey(new ChunkId(chunk)))return null;
+        if(!chunkManager.hasChunkData(chunk))return null;
 
-        return ownedChunks.get(new ChunkId(chunk)).getCity().getName();
+        return chunkManager.getChunkData(chunk).getCity().getName();
     }
 
     /**
@@ -271,11 +241,7 @@ public class CityManager {
      * @return Returns a list of all names for the cities.
      */
     public List<String> getCities(){
-        List<String> names = new ArrayList<>();
-        for(String name : cities.keySet()){
-            names.add(name);
-        }
-        return names;
+        return new ArrayList<>(cities.keySet());
     }
 
     /**
@@ -330,11 +296,9 @@ public class CityManager {
 
             for(Vector2 coordinates : data.getChunks()){
                 Chunk c = w.getChunkAt(coordinates.X, coordinates.Y);
-                if(c == null) continue;
 
-                if(!ownedChunks.containsKey(new ChunkId(c))){
-                    ChunkData d = new ChunkData(c, data);
-                    ownedChunks.put(new ChunkId(c), d);
+                if(!chunkManager.hasChunkData(c)){
+                    chunkManager.createChunkData(c).setCity(data);
                 }
             }
         }

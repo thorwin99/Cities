@@ -38,4 +38,12 @@ public class ChunkData {
     public Chunk getChunk() {
         return chunk;
     }
+
+    /**
+     * Sets the city of this chunk
+     * @param city City to set
+     */
+    public void setCity(City city) {
+        this.city = city;
+    }
 }
