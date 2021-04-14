@@ -28,3 +28,4 @@ This section lists the permissions of the plugin.
     * ``cities.city.residents`` Allows the usage of /city residents. Default admins
     * ``cities.city.delete`` Allows the usage of /city delete. Default admins
     * ``cities.city.create`` Allows users to create a city. Default admins
+    * ``cities.city.tp`` Allows teleportation to a city
